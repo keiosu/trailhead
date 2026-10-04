@@ -1,0 +1,147 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/Player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scenes/player/PlayerVisual.gd" id="2_visual"]
+[ext_resource type="Script" path="res://scenes/player/PlayerCamera.gd" id="3_camera"]
+[ext_resource type="Material" path="res://assets/materials/toon_jacket.tres" id="4_jacket"]
+[ext_resource type="Material" path="res://assets/materials/toon_skin.tres" id="5_skin"]
+[ext_resource type="Material" path="res://assets/materials/toon_pack.tres" id="6_pack"]
+[ext_resource type="Material" path="res://assets/materials/toon_pants.tres" id="7_pants"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.3
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_torso"]
+material = ExtResource("4_jacket")
+radius = 0.3
+height = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = ExtResource("5_skin")
+radius = 0.28
+height = 0.56
+
+[sub_resource type="SphereMesh" id="SphereMesh_nose"]
+material = ExtResource("5_skin")
+radius = 0.06
+height = 0.12
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_brim"]
+material = ExtResource("6_pack")
+top_radius = 0.36
+bottom_radius = 0.36
+height = 0.04
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_crown"]
+material = ExtResource("6_pack")
+top_radius = 0.17
+bottom_radius = 0.23
+height = 0.18
+radial_segments = 24
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_leg"]
+material = ExtResource("7_pants")
+radius = 0.12
+height = 0.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_arm"]
+material = ExtResource("4_jacket")
+radius = 0.09
+height = 0.55
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+material = ExtResource("5_skin")
+radius = 0.1
+height = 0.2
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_pack"]
+material = ExtResource("6_pack")
+radius = 0.2
+height = 0.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bedroll"]
+material = ExtResource("7_pants")
+radius = 0.09
+height = 0.5
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Visual" type="Node3D" parent="."]
+script = ExtResource("2_visual")
+
+[node name="Torso" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
+mesh = SubResource("CapsuleMesh_torso")
+
+[node name="Head" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="Nose" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47, -0.28)
+mesh = SubResource("SphereMesh_nose")
+
+[node name="HatBrim" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.66, 0)
+mesh = SubResource("CylinderMesh_brim")
+
+[node name="HatCrown" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76, 0)
+mesh = SubResource("CylinderMesh_crown")
+
+[node name="LegLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 0.3, 0)
+mesh = SubResource("CapsuleMesh_leg")
+
+[node name="LegRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 0.3, 0)
+mesh = SubResource("CapsuleMesh_leg")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.985, 0.174, 0, -0.174, 0.985, 0, 0, 0, 1, -0.38, 0.9, 0)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="HandLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43, 0.63, 0)
+mesh = SubResource("SphereMesh_hand")
+
+[node name="ArmRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0.985, -0.174, 0, 0.174, 0.985, 0, 0, 0, 1, 0.38, 0.9, 0)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="HandRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43, 0.63, 0)
+mesh = SubResource("SphereMesh_hand")
+
+[node name="Backpack" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0.33)
+mesh = SubResource("CapsuleMesh_pack")
+
+[node name="Bedroll" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 1.36, 0.36)
+mesh = SubResource("CapsuleMesh_bedroll")
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("3_camera")
+
+[node name="Pitch" type="Node3D" parent="CameraRig"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig/Pitch"]
+spring_length = 4.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/Pitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+near = 0.05
+far = 1500.0
+fov = 70.0

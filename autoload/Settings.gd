@@ -7,6 +7,9 @@ const MAX_PLAYER_NAME_LENGTH: int = 16
 var player_name: String = DEFAULT_PLAYER_NAME:
 	set(value):
 		player_name = sanitize_player_name(value)
+## Mouse look sensitivity in radians per pixel.
+var mouse_sensitivity: float = 0.0025
+var invert_mouse_y: bool = false
 
 
 static func sanitize_player_name(raw: String) -> String:

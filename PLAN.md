@@ -35,14 +35,16 @@ Check boxes as you go. Don't start a milestone until the previous one meets its 
 
 ## M1 — One hiker, walking feels good
 
-- [ ] `Player.tscn`: `CharacterBody3D`, capsule collider, placeholder low-poly hiker mesh.
-- [ ] Third-person camera rig: `SpringArm3D` with mouse look, collision, smoothing.
-- [ ] Movement: walk ~1.6 m/s, sprint ~3.5 m/s, acceleration and deceleration, slope handling up to ~40°, jump, step-up over small rocks.
-- [ ] Gray-box test level: hills, a ramp, rocks, a log to step over.
-- [ ] Tunables exposed with `@export`.
-- [ ] **Toon look v1:** `toon.gdshader` (2-band cel shading, colored shadows, rim light) plus inverted-hull outline pass, applied to the player and gray-box level. Directional sun with hard toon shadows. Establish the look now so every later milestone builds on it.
+- [x] `Player.tscn`: `CharacterBody3D`, capsule collider, placeholder low-poly hiker mesh.
+- [x] Third-person camera rig: `SpringArm3D` with mouse look, collision, smoothing.
+- [x] Movement: walk ~1.6 m/s, sprint ~3.5 m/s, acceleration and deceleration, slope handling up to ~40°, jump, step-up over small rocks.
+- [x] Gray-box test level: hills, a ramp, rocks, a log to step over.
+- [x] Tunables exposed with `@export`.
+- [x] **Toon look v1:** `toon.gdshader` (2-band cel shading, colored shadows, rim light) plus inverted-hull outline pass, applied to the player and gray-box level. Directional sun with hard toon shadows. Establish the look now so every later milestone builds on it.
 
 **Done when:** walking up and down hills feels smooth with no jitter or sliding, and the camera never clips into terrain.
+
+> M1 notes: Physics interpolation is on (smooth at any refresh rate); the camera rig is `top_level` and follows the player's interpolated transform. Step-up is a raycast-probed lift in `Player._try_step_up` (max 0.4 m), with `PlayerVisual` easing the mesh up. Max walkable slope is 42°. GUT physics tests cover walk/sprint speed, stopping, no sliding on 35°, climbing 35°, blocked at 50°, stepping onto 0.3 m (with a no-step-up control), blocked by 0.6 m, jump apex, and the camera pulling in before a wall. `tools/capture.gd` saves a windowed screenshot for checking the look. **Caleb: "feels good" needs a hands-on playtest.** Run the project and walk the gray-box (ramps at 20/35/45°, ledges 15/30/45 cm, stairs, rocks, log, overhang, hills up to ~48°). Every tunable is an `@export` on Player / PlayerCamera / PlayerVisual. Outlines on hard-edged boxes can show small corner gaps (inverted hull on split normals). That's fine for gray-box; Blender props get smooth outline normals in M10.
 
 ---
 

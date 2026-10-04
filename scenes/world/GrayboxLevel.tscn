@@ -1,0 +1,207 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scenes/world/GrayboxTerrain.gd" id="1_terrain"]
+[ext_resource type="Material" path="res://assets/materials/toon_grass.tres" id="2_grass"]
+[ext_resource type="Material" path="res://assets/materials/toon_graybox.tres" id="3_graybox"]
+[ext_resource type="Material" path="res://assets/materials/toon_rock.tres" id="4_rock"]
+[ext_resource type="Material" path="res://assets/materials/toon_wood.tres" id="5_wood"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="6_player"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.3, 0.58, 0.92, 1)
+sky_horizon_color = Color(0.72, 0.87, 0.98, 1)
+ground_bottom_color = Color(0.36, 0.5, 0.42, 1)
+ground_horizon_color = Color(0.72, 0.87, 0.98, 1)
+sun_angle_max = 8.0
+
+[sub_resource type="Sky" id="Sky_main"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_main")
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.66, 0.9, 1)
+ambient_light_energy = 0.3
+reflected_light_source = 1
+tonemap_mode = 0
+fog_enabled = true
+fog_light_color = Color(0.72, 0.87, 0.98, 1)
+fog_density = 0.003
+fog_sky_affect = 0.0
+
+[node name="GrayboxLevel" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915, 0.46985, -0.32899, 0, 0.57358, 0.81915, 0.57358, -0.67101, 0.46985, 0, 20, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+light_energy = 0.95
+shadow_enabled = true
+directional_shadow_max_distance = 80.0
+
+[node name="Terrain" type="StaticBody3D" parent="."]
+script = ExtResource("1_terrain")
+material = ExtResource("2_grass")
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Ramp20" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 0.93969, -0.34202, 0, 0.34202, 0.93969, 6, 0.96215, -3.3744)
+use_collision = true
+size = Vector3(3, 0.5, 7)
+material = ExtResource("3_graybox")
+
+[node name="Ramp20Top" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.1971, -8.0778)
+use_collision = true
+size = Vector3(3, 2.394, 3)
+material = ExtResource("3_graybox")
+
+[node name="Ramp35" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 0.81915, -0.57358, 0, 0.57358, 0.81915, 10, 1.8027, -3.0104)
+use_collision = true
+size = Vector3(3, 0.5, 7)
+material = ExtResource("3_graybox")
+
+[node name="Ramp35Top" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.0075, -7.2341)
+use_collision = true
+size = Vector3(3, 4.015, 3)
+material = ExtResource("3_graybox")
+
+[node name="Ramp45" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 0.70711, -0.70711, 0, 0.70711, 0.70711, 14, 2.2981, -2.6517)
+use_collision = true
+size = Vector3(3, 0.5, 7)
+material = ExtResource("3_graybox")
+
+[node name="Ramp45Top" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 2.4749, -6.4497)
+use_collision = true
+size = Vector3(3, 4.95, 3)
+material = ExtResource("3_graybox")
+
+[node name="Ledge15cm" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.075, -2)
+use_collision = true
+size = Vector3(2, 0.15, 1.2)
+material = ExtResource("3_graybox")
+
+[node name="Ledge30cm" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.15, -5)
+use_collision = true
+size = Vector3(2, 0.3, 1.2)
+material = ExtResource("3_graybox")
+
+[node name="Ledge45cm" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.225, -8)
+use_collision = true
+size = Vector3(2, 0.45, 1.2)
+material = ExtResource("3_graybox")
+
+[node name="Stair1" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.1, -0.175)
+use_collision = true
+size = Vector3(2, 0.2, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair2" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.2, -0.525)
+use_collision = true
+size = Vector3(2, 0.4, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair3" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.3, -0.875)
+use_collision = true
+size = Vector3(2, 0.6, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair4" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.4, -1.225)
+use_collision = true
+size = Vector3(2, 0.8, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair5" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.5, -1.575)
+use_collision = true
+size = Vector3(2, 1, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair6" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.6, -1.925)
+use_collision = true
+size = Vector3(2, 1.2, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair7" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.7, -2.275)
+use_collision = true
+size = Vector3(2, 1.4, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="Stair8" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.8, -2.625)
+use_collision = true
+size = Vector3(2, 1.6, 0.35)
+material = ExtResource("3_graybox")
+
+[node name="CameraWall" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 12.5)
+use_collision = true
+size = Vector3(8, 4, 0.5)
+material = ExtResource("3_graybox")
+
+[node name="Overhang" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.6, 5)
+use_collision = true
+size = Vector3(4, 0.4, 4)
+material = ExtResource("3_graybox")
+
+[node name="OverhangPost" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8, 1.2, 3.2)
+use_collision = true
+size = Vector3(0.4, 2.4, 0.4)
+material = ExtResource("3_graybox")
+
+[node name="RockSmall" type="CSGSphere3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.05, -3)
+use_collision = true
+radius = 0.25
+radial_segments = 10
+rings = 6
+smooth_faces = false
+material = ExtResource("4_rock")
+
+[node name="RockMedium" type="CSGSphere3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5)
+use_collision = true
+radius = 0.35
+radial_segments = 10
+rings = 6
+smooth_faces = false
+material = ExtResource("4_rock")
+
+[node name="RockBig" type="CSGSphere3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -7)
+use_collision = true
+radius = 0.6
+radial_segments = 10
+rings = 6
+smooth_faces = false
+material = ExtResource("4_rock")
+
+[node name="Log" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(6.1232e-17, -1, 0, 1, 6.1232e-17, 0, 0, 0, 1, 0, 0.18, -11)
+use_collision = true
+radius = 0.18
+height = 4.0
+sides = 12
+material = ExtResource("5_wood")
+
+[node name="Player" parent="." instance=ExtResource("6_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 8)
