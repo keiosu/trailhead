@@ -13,3 +13,6 @@
 
 # Blender autosave backups
 *.blend1
+
+# Per-machine editor settings
+.vscode/

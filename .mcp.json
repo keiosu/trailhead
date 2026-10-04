@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "godot-docs": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@nuskey8/godot-docs-mcp@latest"
+      ],
+      "env": {}
+    }
+  }
+}
