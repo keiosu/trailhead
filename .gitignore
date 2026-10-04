@@ -1,0 +1,15 @@
+# Godot 4 import cache / editor state
+.godot/
+/android/
+
+# Temp files
+*.tmp
+
+# Export builds
+/build/
+/builds/
+/export/
+*.pck
+
+# Blender autosave backups
+*.blend1
