@@ -29,13 +29,19 @@ const MIN_STEP_RISE: float = 0.02
 @export var fall_gravity_multiplier: float = 1.6
 
 @export_group("Terrain")
-@export_range(0.0, 89.0) var max_slope_degrees: float = 42.0
+@export_range(0.0, 89.0) var max_slope_degrees: float = 42.0:
+	set(value):
+		max_slope_degrees = value
+		floor_max_angle = deg_to_rad(value)
 ## Tallest ledge (m) the hiker walks onto without jumping.
 @export var step_height: float = 0.4
 ## How far past the capsule's front edge to look for a step top.
 @export var step_probe_reach: float = 0.1
 ## How far down the hiker sticks to the ground when walking over crests and down slopes.
-@export var floor_snap: float = 0.35
+@export var floor_snap: float = 0.35:
+	set(value):
+		floor_snap = value
+		floor_snap_length = value
 
 @export_group("Control")
 @export var read_local_input: bool = true
@@ -49,6 +55,8 @@ var sprint_held: bool = false
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
+## True while a UI (debug console, later chat) owns the keyboard.
+var _input_blocked: bool = false
 
 @onready var _visual: PlayerVisual = $Visual
 @onready var _camera: PlayerCamera = $CameraRig
@@ -63,9 +71,29 @@ func _ready() -> void:
 	floor_constant_speed = true
 	floor_stop_on_slope = true
 	floor_block_on_wall = true
-	if not read_local_input:
+	if read_local_input:
+		add_to_group(Groups.DEBUG_TUNABLE)
+		set_meta(Groups.DEBUG_NAME_META, "player")
+		Events.debug_console_toggled.connect(_on_debug_console_toggled)
+	else:
 		_camera.queue_free()
 		_camera = null
+
+
+## Instantly move to `at`, facing `yaw`, with no leftover momentum or interpolation smear.
+func teleport(at: Vector3, yaw: float) -> void:
+	global_position = at
+	velocity = Vector3.ZERO
+	move_yaw = yaw
+	reset_physics_interpolation()
+	_visual.face(yaw)
+	if _camera != null:
+		_camera.snap(yaw)
+
+
+## The yaw "forward" points along (the camera's, for the local player).
+func get_yaw() -> float:
+	return _camera.get_yaw() if _camera != null else move_yaw
 
 
 ## Queue a jump; it fires on the next physics tick we're grounded (or within coyote time).
@@ -106,6 +134,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _read_local_input() -> void:
+	if _input_blocked:
+		move_input = Vector2.ZERO
+		sprint_held = false
+		return
 	move_input = Input.get_vector(InputActions.MOVE_LEFT, InputActions.MOVE_RIGHT, InputActions.MOVE_FORWARD, InputActions.MOVE_BACK)
 	sprint_held = Input.is_action_pressed(InputActions.SPRINT)
 	if Input.is_action_just_pressed(InputActions.JUMP):
@@ -149,3 +181,7 @@ func _try_step_up(delta: float) -> void:
 	global_position += lift
 	velocity.y = maxf(velocity.y, 0.0)
 	_visual.absorb_step(rise)
+
+
+func _on_debug_console_toggled(is_open: bool) -> void:
+	_input_blocked = is_open

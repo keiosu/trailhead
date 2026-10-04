@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://46r4b5mehfjs"]
 
-[ext_resource type="Script" path="res://scenes/main/Main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/world/GrayboxLevel.tscn" id="2_level"]
+[ext_resource type="Script" uid="uid://du4rqo3oy1fr3" path="res://scenes/main/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/world/World.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DebugConsole.tscn" id="3_console"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main")
-start_scene = ExtResource("2_level")
+start_scene = ExtResource("2_world")
+
+[node name="DebugConsole" parent="." instance=ExtResource("3_console")]

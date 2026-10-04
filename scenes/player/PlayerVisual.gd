@@ -24,6 +24,12 @@ func update_motion(velocity: Vector3, on_floor: bool, max_speed: float) -> void:
 	_max_speed = maxf(max_speed, 0.01)
 
 
+## Snap to face `yaw` (teleports, spawning).
+func face(yaw: float) -> void:
+	rotation.y = yaw
+	_step_offset = 0.0
+
+
 ## The body just popped up `rise` meters; keep the mesh where it was and ease it up.
 func absorb_step(rise: float) -> void:
 	_step_offset -= rise

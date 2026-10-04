@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/foliage.gdshader" id="1_foliage"]
+
+[resource]
+shader = ExtResource("1_foliage")
+shader_parameter/rim_strength = 0.15
+shader_parameter/band_threshold = -0.1

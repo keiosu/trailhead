@@ -15,9 +15,17 @@ extends Node3D
 @export var start_pitch_degrees: float = -15.0
 
 @export_group("Distance")
-@export var distance: float = 4.0
+@export var distance: float = 4.0:
+	set(value):
+		distance = value
+		if is_node_ready():
+			_arm.spring_length = value
 ## Radius of the probe that keeps the camera off surfaces.
-@export var collision_radius: float = 0.25
+@export var collision_radius: float = 0.25:
+	set(value):
+		collision_radius = value
+		if is_node_ready() and _arm.shape is SphereShape3D:
+			(_arm.shape as SphereShape3D).radius = value
 ## How quickly the camera eases back out after an obstruction clears.
 @export var zoom_out_sharpness: float = 5.0
 
@@ -25,6 +33,7 @@ var _target: Node3D
 var _yaw: float = 0.0
 var _pitch_angle: float = 0.0
 var _current_distance: float = 0.0
+var _input_blocked: bool = false
 
 @onready var _pitch: Node3D = $Pitch
 @onready var _arm: SpringArm3D = $Pitch/SpringArm3D
@@ -52,6 +61,9 @@ func _ready() -> void:
 	_apply_rotation()
 	_camera.current = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	add_to_group(Groups.DEBUG_TUNABLE)
+	set_meta(Groups.DEBUG_NAME_META, "camera")
+	Events.debug_console_toggled.connect(_on_debug_console_toggled)
 
 
 func get_yaw() -> float:
@@ -65,7 +77,16 @@ func set_look(yaw: float, pitch: float) -> void:
 	_apply_rotation()
 
 
+## Jump straight behind the target (after teleports) instead of gliding there.
+func snap(yaw: float) -> void:
+	set_look(yaw, _pitch_angle)
+	global_position = _follow_point()
+	_current_distance = _arm.get_hit_length() if _arm.get_hit_length() > 0.0 else distance
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	if _input_blocked:
+		return
 	var motion: InputEventMouseMotion = event as InputEventMouseMotion
 	if motion != null and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var sensitivity: float = Settings.mouse_sensitivity
@@ -96,3 +117,7 @@ func _follow_point() -> Vector3:
 func _apply_rotation() -> void:
 	rotation = Vector3(0.0, _yaw, 0.0)
 	_pitch.rotation = Vector3(_pitch_angle, 0.0, 0.0)
+
+
+func _on_debug_console_toggled(is_open: bool) -> void:
+	_input_blocked = is_open

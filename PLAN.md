@@ -66,14 +66,20 @@ Check boxes as you go. Don't start a milestone until the previous one meets its 
 ## M3 — The world: terrain, trail, forest
 
 - [ ] Host picks a world seed and sends it on join. Every peer generates the same world locally.
-- [ ] Terrain: `FastNoiseLite` heightmap → mesh with collision. Start with ~512 × 512 m, valley at the start, peak at the far end.
-- [ ] Terrain material: blend grass / dirt / rock by slope and height (shader).
-- [ ] Trail: a `Path3D` from trailhead to summit, flattened into the terrain and textured as dirt. Optional trail markers or cairns.
-- [ ] Scatter with `MultiMeshInstance3D`: trees, rocks, bushes, grass. Density masks keep the trail clear. Distance culling and visibility ranges.
+- [x] Terrain: `FastNoiseLite` heightmap → mesh with collision. Start with ~512 × 512 m, valley at the start, peak at the far end.
+- [x] Terrain material: blend grass / dirt / rock by slope and height (shader).
+- [x] Trail: a `Path3D` from trailhead to summit, flattened into the terrain and textured as dirt. Optional trail markers or cairns.
+- [x] Scatter with `MultiMeshInstance3D`: trees, rocks, bushes, grass. Density masks keep the trail clear. Distance culling and visibility ranges.
 - [ ] 3–4 named landmarks: trailhead parking area, creek crossing, lake/meadow campsite area, summit viewpoint.
-- [ ] Spawn point at the trailhead.
+- [x] Spawn point at the trailhead.
 
 **Done when:** all players see an identical world from the same seed, the trail is walkable start to summit, and the game holds 60 fps on your machine.
+
+> M3 notes (built early, before M2, at Caleb's request): Generation is pure and seeded: `scripts/world/` (WorldGenSettings resource, Heightfield, WorldGenerator, TrailPlanner, PropMeshes) produces WorldData, and `scenes/world/` (World, Terrain, Scatter, Landmarks) builds nodes from it. Same seed + settings = same world (GUT-tested via a checksum). **Seed sync on join is still open and belongs to M2:** today the seed comes from `--seed=N` or is random, and lives in `GameState.world_seed`. The trail is A* with a steep-grade cost plus seeded "wander", Chaikin-smoothed and carved in; tests check that the steepest grade stays under 34° (it's 19–30°) and that the trail never enters the lake. The "trail" is drawn by the terrain shader and carved into the heightfield, not a `Path3D`. Landmarks: trailhead clearing (sign, benches), meadow + lake (toon water with foam), summit plateau (big cairn, sign), cairns every 70 m. **Creek crossing not done** (needs a carved stream + water strip). Performance: 276–395 fps uncapped on an RTX 3060 Ti at 720p; generation is ~0.5 s and scatter ~1.4 s (main thread, hitches on regen). Collision is HeightMapShape3D scaled ×2; a GUT test confirms it matches the rendered heights to within 5 cm on Jolt.
+>
+> **Debug console** (` or F1): `help`, `targets`, `list <target> [filter]`, `get`/`set <target> <prop> <value>` on any exported var of nodes in `Groups.DEBUG_TUNABLE` (incl. `settings.*` on the world), plus commands any node exposes as `console_<name>()`: `regen [seed|random]`, `seed`, `tp <landmark|x y z>`, `respawn`, `stats`. Tab completes, Up/Down = history. TODO(M2): world-changing commands must become host-only and broadcast, or peers will diverge.
+>
+> Dev tools: `tools/world_map.gd` (headless top-down map PNG for any seed) and `tools/capture.gd` (screenshot; `CAPTURE_CMDS` runs console commands first).
 
 ---
 

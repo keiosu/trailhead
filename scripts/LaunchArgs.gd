@@ -7,10 +7,14 @@ extends RefCounted
 const ARG_HOST: String = "--host"
 const ARG_JOIN_PREFIX: String = "--join="
 const ARG_NAME_PREFIX: String = "--name="
+const ARG_SEED_PREFIX: String = "--seed="
+const NO_SEED: int = -1
 
 var host: bool = false
 var join_address: String = ""
 var player_name: String = ""
+## World seed to host with, or NO_SEED to pick one at random.
+var world_seed: int = NO_SEED
 ## Args we didn't recognise, kept so callers can warn about typos.
 var unknown: PackedStringArray = PackedStringArray()
 
@@ -24,9 +28,15 @@ static func parse(args: PackedStringArray) -> LaunchArgs:
 			result.join_address = arg.substr(ARG_JOIN_PREFIX.length()).strip_edges()
 		elif arg.begins_with(ARG_NAME_PREFIX):
 			result.player_name = arg.substr(ARG_NAME_PREFIX.length()).strip_edges()
+		elif arg.begins_with(ARG_SEED_PREFIX) and arg.substr(ARG_SEED_PREFIX.length()).is_valid_int():
+			result.world_seed = absi(arg.substr(ARG_SEED_PREFIX.length()).to_int())
 		else:
 			result.unknown.append(arg)
 	return result
+
+
+func has_seed() -> bool:
+	return world_seed != NO_SEED
 
 
 func wants_join() -> bool:
@@ -39,4 +49,5 @@ func has_conflict() -> bool:
 
 
 func _to_string() -> String:
-	return "host=%s join=%s name=%s" % [host, join_address if wants_join() else "-", player_name if not player_name.is_empty() else "-"]
+	return "host=%s join=%s name=%s seed=%s" % [host, join_address if wants_join() else "-",
+		player_name if not player_name.is_empty() else "-", world_seed if has_seed() else "-"]

@@ -42,3 +42,16 @@ func test_settings_sanitizes_names() -> void:
 	assert_eq(Settings.sanitize_player_name("  Sam  "), "Sam")
 	assert_eq(Settings.sanitize_player_name("   "), Settings.DEFAULT_PLAYER_NAME)
 	assert_eq(Settings.sanitize_player_name("ABCDEFGHIJKLMNOPQRSTUVWXYZ").length(), Settings.MAX_PLAYER_NAME_LENGTH)
+
+
+func test_seed() -> void:
+	var args: LaunchArgs = LaunchArgs.parse(PackedStringArray(["--seed=1234"]))
+	assert_true(args.has_seed())
+	assert_eq(args.world_seed, 1234)
+	assert_false(LaunchArgs.parse(PackedStringArray()).has_seed())
+
+
+func test_bad_seed_is_unknown() -> void:
+	var args: LaunchArgs = LaunchArgs.parse(PackedStringArray(["--seed=abc"]))
+	assert_false(args.has_seed())
+	assert_eq(args.unknown.size(), 1)

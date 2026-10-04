@@ -14,8 +14,9 @@ const INVENTORY: StringName = &"inventory"
 const PLACE: StringName = &"place"
 const CHAT: StringName = &"chat"
 const PAUSE: StringName = &"pause"
+const DEBUG_CONSOLE: StringName = &"debug_console"
 
 const ALL: Array[StringName] = [
 	MOVE_FORWARD, MOVE_BACK, MOVE_LEFT, MOVE_RIGHT,
-	SPRINT, JUMP, INTERACT, INVENTORY, PLACE, CHAT, PAUSE,
+	SPRINT, JUMP, INTERACT, INVENTORY, PLACE, CHAT, PAUSE, DEBUG_CONSOLE,
 ]
